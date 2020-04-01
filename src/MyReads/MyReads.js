@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { getAll, update } from "../BooksAPI";
 import Category from "./Category";
 import { stringHelper } from "../helper/stringHelper";
+import { Link } from "react-router-dom";
 
 class MyReads extends Component {
   state = {
@@ -25,7 +26,7 @@ class MyReads extends Component {
     });
     console.log(`Book: ${JSON.stringify(book)}, Shelf: ${shelf}`);
     //update book via api on backend
-    update(book, shelf).then(console.log("success"));
+    update(book, shelf);
   };
 
   render() {
@@ -73,6 +74,13 @@ class MyReads extends Component {
           title="Read"
           books={readCategory}
         />
+        <div className="open-search">
+          <Link to="/search">
+            <button onClick={() => this.setState({ showSearchPage: true })}>
+              Add a book
+            </button>
+          </Link>
+        </div>
       </div>
     );
   }

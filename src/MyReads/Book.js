@@ -12,7 +12,8 @@ const Book = props => {
             style={{
               width: 128,
               height: 193,
-              backgroundImage: `url(${book.imageLinks.thumbnail})`
+              backgroundImage:
+                book.imageLinks && `url(${book.imageLinks.thumbnail})`
             }}
           ></div>
           <div className="book-shelf-changer">
@@ -32,9 +33,8 @@ const Book = props => {
         </div>
         <div className="book-title">{book.title}</div>
         <div className="book-authors">
-          {book.authors.map(author => (
-            <span key={author}>{author}</span>
-          ))}
+          {book.authors &&
+            book.authors.map(author => <span key={author}>{author}</span>)}
         </div>
       </div>
     </li>
