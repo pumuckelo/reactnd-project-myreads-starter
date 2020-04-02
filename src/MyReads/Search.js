@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { search, update } from "../BooksAPI";
+import { search, update, getAll } from "../BooksAPI";
 import Book from "./Book";
 
 class Search extends Component {
@@ -9,11 +9,53 @@ class Search extends Component {
   };
 
   searchHandler = event => {
-    search(event.target.value).then(books => this.setState({ books: books }));
+    // if (event.target.value === "") {
+    //   this.setState({ books: [] });
+    //   return;
+    // }
+    console.log(event.target.value);
+    search(event.target.value).then(books => {
+      if (!Array.isArray(books)) {
+        this.setState({ books: [] });
+        return;
+      }
+
+      this.props.personalBooks.forEach(book => {
+        if (
+          books.findIndex(searchedBook => searchedBook.id == book.id) !== -1
+        ) {
+          const index = books.findIndex(
+            searchedBook => searchedBook.id == book.id
+          );
+          console.log("moin");
+          if (!books[index].shelf) {
+            let updatedBooks = [...books];
+            updatedBooks[index].shelf = book.shelf;
+            this.setState({
+              books: updatedBooks
+            });
+            return;
+          }
+        }
+      });
+      this.setState({ books });
+    });
   };
 
   updateBookHandler = (book, shelf) => {
-    update(book, shelf);
+    // update(book, shelf);
+    this.props.updatePersonalBook(book, shelf);
+    this.setState(prevState => {
+      let index = prevState.books.findIndex(
+        currentBook => currentBook.id == book.id
+      );
+      const books = [...prevState.books];
+      //   books[index] = { ...book, shelf: shelf };
+      books[index].shelf = shelf;
+      return {
+        books: books
+      };
+    });
   };
 
   render() {
@@ -23,6 +65,7 @@ class Search extends Component {
           <Link to="/">
             <button className="close-search">Close</button>
           </Link>
+
           <div className="search-books-input-wrapper">
             {/*
         NOTES: The search from BooksAPI is limited to a particular set of search terms.
