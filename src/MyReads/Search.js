@@ -15,7 +15,10 @@ class Search extends Component {
         return;
       }
 
-      let updatedBooks = books.map((book) => (book.shelf = "none"));
+      let updatedBooks = books.map((book) => {
+        book.shelf = "none";
+        return book;
+      });
 
       this.props.personalBooks.forEach((book) => {
         if (
@@ -26,7 +29,10 @@ class Search extends Component {
           const index = updatedBooks.findIndex(
             (searchedBook) => searchedBook.id === book.id
           );
-          if (!updatedBooks[index].shelf) {
+          if (
+            !updatedBooks[index].shelf ||
+            updatedBooks[index].shelf === "none"
+          ) {
             updatedBooks[index].shelf = book.shelf;
             this.setState({
               books: updatedBooks,
