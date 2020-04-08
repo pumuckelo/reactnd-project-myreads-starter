@@ -1,38 +1,35 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { search, update, getAll } from "../BooksAPI";
+import { search } from "../BooksAPI";
 import Book from "./Book";
 
 class Search extends Component {
   state = {
-    books: []
+    books: [],
   };
 
-  searchHandler = event => {
-    // if (event.target.value === "") {
-    //   this.setState({ books: [] });
-    //   return;
-    // }
-    console.log(event.target.value);
-    search(event.target.value).then(books => {
+  searchHandler = (event) => {
+    search(event.target.value).then(async (books) => {
       if (!Array.isArray(books)) {
         this.setState({ books: [] });
         return;
       }
 
-      this.props.personalBooks.forEach(book => {
+      let updatedBooks = books.map((book) => (book.shelf = "none"));
+
+      this.props.personalBooks.forEach((book) => {
         if (
-          books.findIndex(searchedBook => searchedBook.id == book.id) !== -1
+          updatedBooks.findIndex(
+            (searchedBook) => searchedBook.id === book.id
+          ) !== -1
         ) {
-          const index = books.findIndex(
-            searchedBook => searchedBook.id == book.id
+          const index = updatedBooks.findIndex(
+            (searchedBook) => searchedBook.id === book.id
           );
-          console.log("moin");
-          if (!books[index].shelf) {
-            let updatedBooks = [...books];
+          if (!updatedBooks[index].shelf) {
             updatedBooks[index].shelf = book.shelf;
             this.setState({
-              books: updatedBooks
+              books: updatedBooks,
             });
             return;
           }
@@ -43,17 +40,15 @@ class Search extends Component {
   };
 
   updateBookHandler = (book, shelf) => {
-    // update(book, shelf);
     this.props.updatePersonalBook(book, shelf);
-    this.setState(prevState => {
+    this.setState((prevState) => {
       let index = prevState.books.findIndex(
-        currentBook => currentBook.id == book.id
+        (currentBook) => currentBook.id === book.id
       );
       const books = [...prevState.books];
-      //   books[index] = { ...book, shelf: shelf };
       books[index].shelf = shelf;
       return {
-        books: books
+        books: books,
       };
     });
   };
@@ -85,7 +80,7 @@ class Search extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {Array.isArray(this.state.books) &&
-              this.state.books.map(book => (
+              this.state.books.map((book) => (
                 <Book
                   key={book.id}
                   book={book}

@@ -3,16 +3,18 @@ import { stringHelper } from "../helper/stringHelper";
 import Category from "./Category";
 import { Link } from "react-router-dom";
 
-const Categorys = props => {
+const Categories = (props) => {
   const { books, onUpdateBook } = props;
 
-  const wantToReadCategory = books.filter(book => book.shelf === "wantToRead");
-
-  const currentlyReadingCategory = books.filter(
-    book => book.shelf === "currentlyReading"
+  const wantToReadCategory = books.filter(
+    (book) => book.shelf === "wantToRead"
   );
 
-  const readCategory = books.filter(book => book.shelf === "read");
+  const currentlyReadingCategory = books.filter(
+    (book) => book.shelf === "currentlyReading"
+  );
+
+  const readCategory = books.filter((book) => book.shelf === "read");
 
   return (
     <div>
@@ -23,7 +25,7 @@ const Categorys = props => {
           textAlign: "center",
           width: "100%",
           marginTop: "0",
-          color: "white"
+          color: "white",
         }}
       >
         My Reads
@@ -55,4 +57,4 @@ const Categorys = props => {
   );
 };
 
-export default Categorys;
+export default Categories;

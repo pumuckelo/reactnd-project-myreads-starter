@@ -1,6 +1,6 @@
 import React from "react";
 
-const Book = props => {
+const Book = (props) => {
   const { book, onUpdateBook } = props;
 
   return (
@@ -12,13 +12,16 @@ const Book = props => {
             style={{
               width: 128,
               height: 193,
-              backgroundImage:
-                book.imageLinks && `url(${book.imageLinks.thumbnail})`
+              backgroundImage: `url(${
+                book.imageLinks && book.imageLinks.thumbnail
+                  ? `${book.imageLinks.thumbnail}`
+                  : `http://via.placeholder.com/128x193?text=No%20Cover`
+              })`,
             }}
-          ></div>
+          />
           <div className="book-shelf-changer">
             <select
-              onChange={e => {
+              onChange={(e) => {
                 onUpdateBook(book, e.target.value);
               }}
               value={book.shelf}
@@ -33,8 +36,7 @@ const Book = props => {
         </div>
         <div className="book-title">{book.title}</div>
         <div className="book-authors">
-          {book.authors &&
-            book.authors.map(author => <span key={author}>{author}</span>)}
+          {Array.isArray(book.authors) ? book.authors.join(", ") : book.author}
         </div>
       </div>
     </li>
